@@ -1,0 +1,93 @@
+# models/staging/schema.yml
+# Schema tests for all staging models
+# Run with: dbt test --select staging
+
+version: 2
+
+models:
+  - name: stg_clicks
+    description: "Cleaned click events — one row per user click, filtered to valid records only"
+    columns:
+      - name: click_id
+        description: "Unique click event identifier"
+        tests:
+          - unique
+          - not_null
+      - name: user_id
+        tests:
+          - not_null
+      - name: session_id
+        tests:
+          - not_null
+      - name: clicked_at
+        tests:
+          - not_null
+      - name: price_seen_usd
+        tests:
+          - not_null
+      - name: device
+        tests:
+          - accepted_values:
+              values: ['mobile', 'desktop', 'tablet']
+      - name: data_quality_flag
+        tests:
+          - accepted_values:
+              values: ['valid']
+
+  - name: stg_sessions
+    description: "Cleaned session events — one row per user session"
+    columns:
+      - name: session_event_id
+        description: "Unique session event identifier"
+        tests:
+          - unique
+          - not_null
+      - name: session_id
+        tests:
+          - not_null
+      - name: user_id
+        tests:
+          - not_null
+      - name: event_timestamp
+        tests:
+          - not_null
+      - name: duration_seconds
+        tests:
+          - not_null
+      - name: engagement_tier
+        tests:
+          - accepted_values:
+              values: ['highly_engaged', 'engaged', 'brief', 'bounce']
+      - name: device
+        tests:
+          - accepted_values:
+              values: ['mobile', 'desktop', 'tablet']
+
+  - name: stg_purchases
+    description: "Cleaned purchase events — fraud excluded, valid amounts only"
+    columns:
+      - name: purchase_id
+        description: "Unique purchase event identifier"
+        tests:
+          - unique
+          - not_null
+      - name: order_id
+        tests:
+          - not_null
+      - name: user_id
+        tests:
+          - not_null
+      - name: total_amount_usd
+        tests:
+          - not_null
+      - name: purchased_at
+        tests:
+          - not_null
+      - name: order_value_tier
+        tests:
+          - accepted_values:
+              values: ['high_value', 'mid_value', 'low_value']
+      - name: payment_group
+        tests:
+          - accepted_values:
+              values: ['card', 'digital_wallet', 'paypal', 'other']

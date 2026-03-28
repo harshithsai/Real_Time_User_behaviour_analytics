@@ -1,0 +1,47 @@
+name: 'dbt'
+version: '1.0.0'
+config-version: 2
+
+profile: 'dbt'
+
+# ── Paths ─────────────────────────────────────────
+
+model-paths: ["models"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+# ── Models Configuration ─────────────────────────
+
+models:
+dbt:
+
+# Default (optional fallback)
++materialized: view
+
+staging:
+  +materialized: view
+  +schema: STG
+  +database: STAGING_DB
+
+intermediate:
+  +materialized: ephemeral
+
+marts:
+  +materialized: table
+  +schema: MARTS
+  +database: ANALYTICS_DB
+
+  fct_sessions:
+    +cluster_by: ['session_date', 'country']
+
+  fct_purchases:
+    +cluster_by: ['purchase_date', 'product_category']
+
+  agg_hourly_kpis:
+    +cluster_by: ['hour_timestamp']
+

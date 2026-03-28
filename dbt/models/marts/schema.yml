@@ -1,0 +1,105 @@
+# models/marts/schema.yml
+# Schema tests for all mart models
+# Run with: dbt test --select marts
+
+version: 2
+
+models:
+  - name: fct_sessions
+    description: "One row per user session with full click behaviour and purchase outcome"
+    columns:
+      - name: session_id
+        description: "Unique session identifier"
+        tests:
+          - unique
+          - not_null
+      - name: user_id
+        tests:
+          - not_null
+      - name: session_date
+        tests:
+          - not_null
+      - name: duration_seconds
+        tests:
+          - not_null
+      - name: engagement_tier
+        tests:
+          - accepted_values:
+              values: ['highly_engaged', 'engaged', 'brief', 'bounce']
+      - name: funnel_stage
+        tests:
+          - accepted_values:
+              values: ['purchased', 'checkout', 'cart', 'browsing', 'no_activity']
+      - name: session_revenue_usd
+        tests:
+          - not_null
+      - name: engagement_score
+        tests:
+          - not_null
+
+  - name: fct_purchases
+    description: "One row per purchase order enriched with session context"
+    columns:
+      - name: purchase_id
+        description: "Unique purchase event identifier"
+        tests:
+          - unique
+          - not_null
+      - name: order_id
+        tests:
+          - not_null
+      - name: user_id
+        tests:
+          - not_null
+      - name: total_amount_usd
+        tests:
+          - not_null
+      - name: purchased_at
+        tests:
+          - not_null
+      - name: order_value_tier
+        tests:
+          - accepted_values:
+              values: ['high_value', 'mid_value', 'low_value']
+      - name: payment_group
+        tests:
+          - accepted_values:
+              values: ['card', 'digital_wallet', 'paypal', 'other']
+
+  - name: dim_users
+    description: "One row per user with lifetime session and purchase metrics"
+    columns:
+      - name: user_id
+        description: "Unique user identifier"
+        tests:
+          - unique
+          - not_null
+      - name: total_sessions
+        tests:
+          - not_null
+      - name: user_segment
+        tests:
+          - accepted_values:
+              values: ['vip', 'regular', 'one_time', 'browser']
+      - name: conversion_rate_pct
+        tests:
+          - not_null
+      - name: lifetime_spend_usd
+        tests:
+          - not_null
+
+  - name: agg_hourly_kpis
+    description: "Hourly KPI aggregations used by the Streamlit dashboard"
+    columns:
+      - name: hour_timestamp
+        tests:
+          - not_null
+      - name: total_clicks
+        tests:
+          - not_null
+      - name: conversion_rate_pct
+        tests:
+          - not_null
+      - name: bounce_rate_pct
+        tests:
+          - not_null

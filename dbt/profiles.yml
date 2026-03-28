@@ -1,0 +1,15 @@
+dbt:
+target: dev
+outputs:
+dev:
+type: snowflake
+account: ZKOIXBW-OEB33594   # e.g. abc12345.ap-south-1
+user: HARSHITH1079
+password: Aixpco@9666269e
+role: ACCOUNTADMIN
+database: STAGING_DB
+warehouse: ANALYTICS_WH
+schema: STG
+threads: 4
+client_session_keep_alive: false
+

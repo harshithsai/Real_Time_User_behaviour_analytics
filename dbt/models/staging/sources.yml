@@ -1,0 +1,81 @@
+# models/staging/sources.yml
+# Declares RAW_DB tables as dbt sources
+# This is the single source of truth for where raw data lives
+
+version: 2
+
+sources:
+  - name: raw_events
+    database: RAW_DB
+    schema: EVENTS
+    description: "Raw event tables written by PySpark streaming every 30 seconds"
+
+    tables:
+      - name: RAW_CLICKS
+        description: "Raw click/page-view events from the Kafka user-clicks topic"
+        columns:
+          - name: EVENT_ID
+            description: "Unique event identifier (UUID)"
+            tests:
+              - not_null
+              - unique
+          - name: USER_ID
+            description: "User who triggered the event"
+            tests:
+              - not_null
+          - name: SESSION_ID
+            description: "Session the click belongs to"
+            tests:
+              - not_null
+          - name: EVENT_TIMESTAMP
+            description: "When the event occurred (UTC)"
+            tests:
+              - not_null
+          - name: PRICE_SEEN
+            description: "Product price displayed to the user"
+
+      - name: RAW_SESSIONS
+        description: "Raw session events from the Kafka user-sessions topic"
+        columns:
+          - name: EVENT_ID
+            description: "Unique event identifier (UUID)"
+            tests:
+              - not_null
+              - unique
+          - name: SESSION_ID
+            description: "Unique session identifier"
+            tests:
+              - not_null
+          - name: USER_ID
+            description: "User who owns this session"
+            tests:
+              - not_null
+          - name: EVENT_TIMESTAMP
+            description: "When the session event occurred (UTC)"
+            tests:
+              - not_null
+
+      - name: RAW_PURCHASES
+        description: "Raw purchase events from the Kafka user-purchases topic"
+        columns:
+          - name: EVENT_ID
+            description: "Unique event identifier (UUID)"
+            tests:
+              - not_null
+              - unique
+          - name: ORDER_ID
+            description: "Unique order identifier"
+            tests:
+              - not_null
+          - name: USER_ID
+            description: "User who made the purchase"
+            tests:
+              - not_null
+          - name: TOTAL_AMOUNT
+            description: "Total order value in USD"
+            tests:
+              - not_null
+          - name: EVENT_TIMESTAMP
+            description: "When the purchase occurred (UTC)"
+            tests:
+              - not_null
