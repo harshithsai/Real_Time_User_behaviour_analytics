@@ -1,3 +1,12 @@
+# Output
+
+<img width="1911" height="907" alt="Screenshot 2026-04-05 230806" src="https://github.com/user-attachments/assets/6ad82e9b-ee5b-468e-9cc2-d822a5f50622" />
+
+<img width="1911" height="907" alt="Screenshot 2026-04-05 230841" src="https://github.com/user-attachments/assets/160500eb-c95d-4118-aa0d-9c5104cfb108" />
+
+<img width="1912" height="895" alt="Screenshot 2026-04-05 230858" src="https://github.com/user-attachments/assets/6407a3f1-d686-4e90-819b-fd3d5c9e07ee" />
+
+
 # realtime-behavior-analytics
 
 [![dbt CI](https://github.com/yourusername/realtime-behavior-analytics/actions/workflows/ci_dbt_tests.yml/badge.svg)](https://github.com/yourusername/realtime-behavior-analytics/actions)
